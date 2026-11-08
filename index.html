@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="PX Business Network - All-in-One Business Network">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>PX Business Network — Online Shopping</title>
+<style>
+:root{--ink:#101827;--muted:#667085;--bg:#f5f7fb;--brand:#635bff;--line:#e8ebf2}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#101827;color:white;padding:16px 4%;position:sticky;top:0;z-index:3;box-shadow:0 3px 18px #10182722}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1100px;margin:auto}.logo{font-size:22px;font-weight:800}.logo span{color:#a7a2ff}.cart,.adminBtn{border:0;border-radius:22px;padding:10px 12px;background:#fff;color:#101827;font-weight:700}.adminBtn{background:#dcd9ff}
+main{max-width:1100px;margin:auto;padding:20px 4% 50px}.hero{background:linear-gradient(120deg,#25205d,#635bff 65%,#9d96ff);border-radius:22px;color:white;padding:28px 22px;margin:8px 0 22px}.hero h1{font-size:clamp(27px,6vw,42px);line-height:1.12;margin:0 0 10px}.hero p{margin:0 0 18px;color:#eeedff;line-height:1.5}.search{display:flex;background:white;border-radius:12px;padding:5px;gap:6px}.search input{border:0;outline:0;flex:1;min-width:0;padding:11px;font-size:15px}.search button{border:0;border-radius:9px;background:#101827;color:white;padding:0 15px}
+h2{font-size:21px;margin:22px 0 12px}.cats{display:flex;gap:9px;overflow:auto;padding-bottom:8px}.cat{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:22px;padding:10px 15px;color:#344054;font-weight:600}.cat.active{background:#eae9ff;border-color:#c8c4ff;color:#443bd1}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.product{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden}.pic{height:135px;display:grid;place-items:center;font-size:54px;background:linear-gradient(135deg,#f0efff,#f9faff)}.info{padding:12px}.name{font-weight:700;margin-bottom:6px}.desc{font-size:12px;color:var(--muted);min-height:28px}.price{font-size:17px;font-weight:800;margin:9px 0}.add{width:100%;border:0;border-radius:10px;padding:11px;background:#635bff;color:white;font-weight:700}.add:active{transform:scale(.98)}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:18px}.empty{grid-column:1/-1;padding:25px;text-align:center;color:var(--muted);background:white;border-radius:14px}
+footer{background:#101827;color:#d8dbea;padding:24px 4%;text-align:center;font-size:13px}.modal{display:none;position:fixed;inset:0;background:#10182799;z-index:5;align-items:flex-end;justify-content:center}.sheet{background:white;border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:560px;max-height:85vh;overflow:auto}.sheet-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eef0f6;border-radius:50%;width:34px;height:34px;font-size:20px}.cartrow{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.qty button{border:0;background:#eef0f6;border-radius:6px;padding:5px 9px}.checkout{display:block;width:100%;padding:14px;border:0;border-radius:11px;background:#16a34a;color:white;font-weight:800;margin-top:16px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.pic{height:165px}.hero{padding:38px}.modal{align-items:center}.sheet{border-radius:20px}}
+</style></head>
+<body>
+<header><div class="top"><div class="logo">🛍️ <span>PX</span> Business Network</div><div style="display:flex;gap:7px"><button class="adminBtn" onclick="openAdmin()">⚙️ Admin</button><button class="cart" onclick="openCart()">🛒 <b id="count">0</b></button></div></div></header>
+<main>
+<section class="hero"><h1>हर चीज़, एक ही जगह!</h1><p>अपनी पसंद के प्रोडक्ट खोजें और आसानी से ऑर्डर करें।</p><div class="search"><input id="search" placeholder="प्रोडक्ट खोजें..." oninput="render()"><button onclick="render()">खोजें</button></div></section>
+<h2>कैटेगरी</h2><div class="cats" id="cats"></div>
+<h2 id="sectionTitle">लोकप्रिय प्रोडक्ट</h2><div class="grid" id="products"></div>
+<p class="note">यह शुरुआती डेमो स्टोर है। असली बिक्री शुरू करने से पहले अपना नाम, प्रोडक्ट, कीमत, WhatsApp नंबर, डिलीवरी और पेमेंट सेटिंग जोड़ें। ऑनलाइन पेमेंट अभी सक्रिय नहीं है।</p>
+</main>
+<footer>© 2026 PX Business Network · आपकी ऑनलाइन शॉप<br>सहायता के लिए WhatsApp ऑर्डर उपलब्ध</footer>
+<div class="modal" id="adminModal" onclick="if(event.target===this)closeAdmin()"><div class="sheet"><div class="sheet-head"><h2>⚙️ Admin Panel</h2><button class="close" onclick="closeAdmin()">×</button></div>
+<p class="note">यह डेमो एडमिन पैनल है। जो बदलाव करेंगे, वे इसी ब्राउज़र में सेव रहेंगे।</p>
+<h3>नया प्रोडक्ट जोड़ें / एडिट करें</h3><input id="editId" type="hidden"><label>प्रोडक्ट का नाम</label><input id="pName" placeholder="जैसे: नया टी-शर्ट" style="width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:9px"><label>कैटेगरी</label><input id="pCat" placeholder="जैसे: कपड़े" style="width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:9px"><label>कीमत (₹)</label><input id="pPrice" type="number" min="0" placeholder="499" style="width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:9px"><label>इमोजी (फोटो न हो तो)</label><input id="pEmoji" placeholder="📦" style="width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:9px"><label>मोबाइल से फोटो चुनें</label><input id="pImage" type="file" accept="image/*" style="display:block;margin:8px 0"><button class="checkout" style="background:#635bff" onclick="saveProduct()">प्रोडक्ट सेव करें</button><h3>कैटेगरी मैनेज करें</h3><div style="display:flex;gap:7px"><input id="newCategory" placeholder="नई कैटेगरी" style="flex:1;min-width:0;padding:11px;border:1px solid #ddd;border-radius:9px"><button class="add" style="width:auto" onclick="addCategory()">जोड़ें</button></div><h3>आपके प्रोडक्ट</h3><div id="adminProducts"></div>
+</div></div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeCart()"><div class="sheet"><div class="sheet-head"><h2>आपका कार्ट</h2><button class="close" onclick="closeCart()">×</button></div><div id="cartItems"></div><div id="total" style="font-weight:800;text-align:right;margin-top:14px"></div><button class="checkout" onclick="orderWhatsApp()">WhatsApp पर ऑर्डर करें</button><p class="note">ऑर्डर भेजने के लिए नीचे कोड में अपना WhatsApp नंबर जोड़ना जरूरी है।</p></div></div>
+<script>
+let products=[
+{id:1,n:"कॉटन टी-शर्ट",c:"कपड़े",p:499,e:"👕",d:"आरामदायक रोज़ाना पहनावा"},
+{id:2,n:"स्पोर्ट्स शूज़",c:"जूते",p:1299,e:"👟",d:"हल्के और आरामदायक"},
+{id:3,n:"वायरलेस ईयरबड्स",c:"इलेक्ट्रॉनिक्स",p:999,e:"🎧",d:"म्यूज़िक और कॉल के लिए"},
+{id:4,n:"स्मार्ट वॉच",c:"इलेक्ट्रॉनिक्स",p:1799,e:"⌚",d:"स्टाइलिश स्मार्ट फीचर्स"},
+{id:5,n:"स्किन केयर किट",c:"ब्यूटी",p:699,e:"🧴",d:"डेली केयर कलेक्शन"},
+{id:6,n:"किचन कंटेनर सेट",c:"घर",p:549,e:"🍱",d:"किचन व्यवस्थित रखें"},
+{id:7,n:"ग्रॉसरी पैक",c:"किराना",p:399,e:"🛒",d:"रोज़मर्रा की जरूरी चीज़ें"},
+{id:8,n:"बैकपैक",c:"बैग",p:899,e:"🎒",d:"काम और यात्रा के लिए"}
+];
+try{const saved=JSON.parse(localStorage.getItem("smartcart_products")||"null");if(saved)products=saved}catch(e){}
+let extraCategories=JSON.parse(localStorage.getItem("smartcart_categories")||"[]");
+let category="सभी",cart={};
+function saveData(){localStorage.setItem("smartcart_products",JSON.stringify(products));localStorage.setItem("smartcart_categories",JSON.stringify(extraCategories))}
+const categoriesNow=()=>["सभी",...new Set([...products.map(x=>x.c),...extraCategories])];
+function drawCats(){document.getElementById("cats").innerHTML=categoriesNow().map(c=>`<button class="cat ${c===category?'active':''}" onclick="category='${c}';drawCats();render()">${c}</button>`).join("")}
+function render(){let q=document.getElementById("search").value.toLowerCase();let arr=products.filter(x=>(category==="सभी"||x.c===category)&&(x.n.toLowerCase().includes(q)||x.c.toLowerCase().includes(q)));document.getElementById("products").innerHTML=arr.length?arr.map(x=>`<article class="product"><div class="pic">${x.img?`<img src="${x.img}" style="width:100%;height:100%;object-fit:cover">`:x.e}</div><div class="info"><div class="name">${x.n}</div><div class="desc">${x.d}</div><div class="price">₹${x.p.toLocaleString("en-IN")}</div><button class="add" onclick="add(${x.id})">कार्ट में जोड़ें</button></div></article>`).join(""):'<div class="empty">कोई प्रोडक्ट नहीं मिला।</div>'}
+function add(id){cart[id]=(cart[id]||0)+1;updateCount()}
+function updateCount(){document.getElementById("count").textContent=Object.values(cart).reduce((a,b)=>a+b,0)}
+function openCart(){document.getElementById("modal").style.display="flex";drawCart()}
+function closeCart(){document.getElementById("modal").style.display="none"}
+function drawCart(){let ids=Object.keys(cart);let total=0;document.getElementById("cartItems").innerHTML=ids.length?ids.map(id=>{let p=products.find(x=>x.id==id),sub=p.p*cart[id];total+=sub;return `<div class="cartrow"><div>${p.e} <b>${p.n}</b><br><small>₹${p.p} × ${cart[id]}</small></div><div class="qty"><button onclick="changeQty(${id},-1)">−</button> ${cart[id]} <button onclick="changeQty(${id},1)">+</button></div></div>`}).join(""):'<p>आपका कार्ट खाली है।</p>';document.getElementById("total").textContent="कुल: ₹"+total.toLocaleString("en-IN")}
+function changeQty(id,n){cart[id]=(cart[id]||0)+n;if(cart[id]<=0)delete cart[id];updateCount();drawCart()}
+function openAdmin(){document.getElementById("adminModal").style.display="flex";drawAdmin()}
+function closeAdmin(){document.getElementById("adminModal").style.display="none"}
+function drawAdmin(){document.getElementById("adminProducts").innerHTML=products.map(p=>`<div class="cartrow"><div>${p.e||"📦"} <b>${p.n}</b><br><small>${p.c} · ₹${p.p}</small></div><div><button class="qty" onclick="editProduct(${p.id})">✏️</button> <button class="qty" onclick="deleteProduct(${p.id})">🗑️</button></div></div>`).join("")||"अभी कोई प्रोडक्ट नहीं है"}
+function editProduct(id){let p=products.find(x=>x.id===id);document.getElementById("editId").value=p.id;document.getElementById("pName").value=p.n;document.getElementById("pCat").value=p.c;document.getElementById("pPrice").value=p.p;document.getElementById("pEmoji").value=p.e||"📦";document.getElementById("pImage").value="";window.scrollTo(0,0)}
+function saveProduct(){let n=document.getElementById("pName").value.trim(),c=document.getElementById("pCat").value.trim(),p=Number(document.getElementById("pPrice").value),e=document.getElementById("pEmoji").value.trim()||"📦",id=Number(document.getElementById("editId").value),file=document.getElementById("pImage").files[0];if(!n||!c||!p||p<0){alert("नाम, कैटेगरी और सही कीमत भरें।");return}let finish=(img)=>{let old=products.find(x=>x.id===id);let item={id:id||Date.now(),n,c,p,e,d:old?.d||"नया प्रोडक्ट",...(img?{img}:old?.img?{img:old.img}:{})};if(id)products=products.map(x=>x.id===id?item:x);else products.unshift(item);if(!extraCategories.includes(c))extraCategories.push(c);saveData();drawCats();render();drawAdmin();document.getElementById("editId").value="";document.getElementById("pName").value="";document.getElementById("pCat").value="";document.getElementById("pPrice").value="";document.getElementById("pEmoji").value="";document.getElementById("pImage").value="";alert("प्रोडक्ट सेव हो गया!")};if(file){let r=new FileReader();r.onload=()=>finish(r.result);r.readAsDataURL(file)}else finish(null)}
+function deleteProduct(id){if(!confirm("क्या यह प्रोडक्ट हटाना चाहते हैं?"))return;products=products.filter(x=>x.id!==id);delete cart[id];saveData();updateCount();drawCats();render();drawAdmin()}
+function addCategory(){let c=document.getElementById("newCategory").value.trim();if(!c)return;if(!extraCategories.includes(c)&&!products.some(x=>x.c===c))extraCategories.push(c);saveData();document.getElementById("newCategory").value="";drawCats();drawAdmin()}
+function orderWhatsApp(){if(!Object.keys(cart).length){alert("पहले कार्ट में प्रोडक्ट जोड़ें।");return}const phone="91XXXXXXXXXX";if(phone.includes("X")){alert("WhatsApp नंबर सेट करने के लिए कोड में 91XXXXXXXXXX बदलें।");return}let lines=["नमस्ते, मुझे ये प्रोडक्ट ऑर्डर करने हैं:"];let total=0;Object.keys(cart).forEach(id=>{let p=products.find(x=>x.id==id);lines.push(`${p.n} × ${cart[id]} = ₹${p.p*cart[id]}`);total+=p.p*cart[id]});lines.push("कुल: ₹"+total);window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(lines.join("\n")),"_blank")}
+drawCats();render();
+
+// PWA service worker registration
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .catch(err => console.log("Service worker registration failed:", err));
+  });
+}
+</script></body></html>
